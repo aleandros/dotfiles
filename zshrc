@@ -5,11 +5,7 @@ ZSH=$HOME/.oh-my-zsh
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-ZSH_THEME="miloshadzic"
-
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsih="mate ~/.oh-my-zsh"
+ZSH_THEME="norm"
 
 # Set to this to use case-sensitive completion
 # CASE_SENSITIVE="true"
@@ -45,15 +41,13 @@ plugins=(git ruby)
 source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
-export PATH=$PATH:/home/edgar/bin:/usr/lib/lightdm/lightdm:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/home/edgar/bin:/home/edgar/bin/cask/bin
-
-# Manual---VIMRUNTIME
-export PATH="$HOME/.rbenv/bin:$PATH"
-eval "$(rbenv init -)"
+export PATH=$PATH:$HOME/bin:/usr/lib/lightdm/lightdm:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/home/edgar/bin/golang/bin:/home/edgar/bin/go_appengine
+export GOPATH=$HOME/bin/golang
 
 # Manual----ALIASES
 alias ack="ack-grep"
 alias stop="kill -TSTP"
+alias def='mux start default'
 
 # Manual----SET COLORS
 [ -z "$TMUX" ] && export TERM=xterm-256color
@@ -68,3 +62,6 @@ source ~/bin/tmuxinator.zsh
 bindkey -v
 bindkey '\e[3~' delete-char
 bindkey '^R' history-incremental-search-backward
+
+eval "$(rbenv init -)"
+
