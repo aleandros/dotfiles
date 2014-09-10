@@ -1,9 +1,0 @@
-let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =7
-let g:netrw_dirhist_1='/home/edgar/Documents/Kalbee/prototyping/frontend/app/scripts'
-let g:netrw_dirhist_2='/home/edgar/.gconf/apps/gnome-terminal/profiles/Default'
-let g:netrw_dirhist_3='/home/edgar/Documents/Tests/sinatra_up_and_running/static_content/static_with_public/custom_public'
-let g:netrw_dirhist_4='/home/edgar/Dropbox/Work/cesit/lib/client'
-let g:netrw_dirhist_5='/home/edgar/.oh-my-zsh/plugins/thor'
-let g:netrw_dirhist_6='/home/edgar/.oh-my-zsh/plugins/vi-mode'
-let g:netrw_dirhist_7='/home/edgar/Documents/Kalbee/software/kalbee/app/assets/stylesheets'
