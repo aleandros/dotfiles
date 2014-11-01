@@ -1,147 +1,126 @@
-" Vundle related configurations
-set nocompatible                            " enable vim features not in vi
-filetype off                                " required for bundle
-set rtp=/usr/share/vim/vim74,
-        \~/.vim,~/.vim/bundle/vundle        " define runtime path
-call vundle#rc()                            " call vundle
-Plugin 'gmarik/vundle'                      " let vundle mange itself
+""""""" Plugin Installations """""""
 
-" Plugins
-Plugin 'kien/ctrlp.vim'                     " fuzzy text finder
-Plugin 'tpope/vim-fugitive'                 " git integration
-Plugin 'tomtom/tcomment_vim'                " toggle comments
-Plugin 'sirver/ultisnips'                   " snippet engine
-Plugin 'honza/vim-snippets'                 " snippet collection
-Plugin 'airblade/vim-gitgutter'             " show git changes inline
-Plugin 'bling/vim-airline'                  " status bar
-Plugin 'edkolev/tmuxline.vim'               " use ariline theme in tmux
-Plugin 'tpope/vim-surround'                 " surround keybindings
-Plugin 'bronson/vim-trailing-whitespace'    " show trailing whitespace
-Plugin 'ciaranm/detectindent'               " autodetect indent
-Plugin 'Yggdroot/indentLine'                " show line indents
-Plugin 'plasticboy/vim-markdown'            " markdown support
-Plugin 'jelera/vim-javascript-syntax'       " better javascript syntax support
-Plugin 'pangloss/vim-javascript'            " better javascript support
-Plugin 'julialang/julia-vim'                " julia support
-Plugin 'marijnh/tern_for_vim'               " tern-based javascript completition
-Plugin 'othree/html5.vim'                   " html5 tags supprt
-Plugin 'davidhalter/jedi-vim'               " jedi-python for completition
-Plugin 'vim-scripts/fortran.vim'            " extra fortran 90 support
-Plugin 'vim-perl/vim-perl'                  " extra syntax support for perl
-Plugin 'vim-ruby/vim-ruby'                  " better ruby support
-Plugin 'fatih/vim-go'                       " better go-lang support
-Plugin 'fatih/molokai'                      " modified molokai
-Plugin 'majutsushi/tagbar'                  " tagbar plugin
-Plugin 'derekwyatt/vim-scala'               " better scala support
-Plugin 'rainerborene/vim-heroku'            " heroku theme
-Plugin 'godlygeek/csapprox'                 " correct non-terminal colorschemes
-Plugin 'scrooloose/syntastic'               " check syntaxis for different languages
-Plugin 'Valloric/YouCompleteMe'             " better autocompletition
+"-- General Plugins --"
+call plug#begin('~/.vim/plugged')                     " call vim-plug
+Plug 'tpope/vim-fugitive'                             " git integration
+Plug 'tpope/vim-commentary'                           " toggle comments
+Plug 'tpope/vim-unimpaired'                           " quick switch between elements
+Plug 'airblade/vim-gitgutter'                         " show git changes inline
+Plug 'bling/vim-airline'                              " status bar
+Plug 'tpope/vim-surround'                             " surround keybindings
+Plug 'ntpeters/vim-better-whitespace'                 " show trailing whitespace
+Plug 'ciaranm/detectindent'                           " autodetect indent
+Plug 'scrooloose/syntastic'                           " check syntaxis for different languages
+Plug 'Yggdroot/indentLine'                            " show line indents
+Plug 'Shougo/vimproc.vim', {'do': 'make'}             " plugin for async operations
+Plug 'Shougo/unite.vim'                               " handle multiple search targets
+Plug 'Shougo/unite-outline'                           " navigate the outline of certain filetypes
+Plug 'neilagabriel/vim-geeknote'                      " integrate geeknote into vim
+Plug 'mattn/emmet-vim'                                " awsome html editing
+Plug 'nanotech/jellybeans.vim'                        " awesome colorscheme
 
-" Plugin configurations
-let g:ctrlp_map='<c-p>'                     " ctrlp - set keyboard shortcut
-let g:ctrlp_command='CtrlP'                 " ctrlp - default ctrlp action
-let g:UltiSnipsExpandTrigger='<tab>'        " ultisnips - expand with tab
-let g:UltiSnipsJumpForwardTrigger='<c-b>'   " ultisnips - jump next with CtrlB
-let g:UltiSnipsJumpBackwardTrigger='<c-z>'  " ultisnips - jump prev. with CtrlZ
-let g:UltiSnipsEditSplit='vertical'         " ultisnips - split when editting
-set laststatus=2                            " airline - always show status bar
+"-- Language-specific plugins --"
+Plug 'plasticboy/vim-markdown'                        " markdown support
+Plug 'ekalinin/Dockerfile.vim'                        " syntax highlighting for dockerfiles
+Plug 'pangloss/vim-javascript', {'for': 'javascript'} " better javascript support
+Plug 'marijnh/tern_for_vim',
+      \{'for': 'javascript', 'do': 'npm install'}     " tern-based javascript completition
+Plug 'mxw/vim-jsx'                                    " Support for jsx files
+Plug 'othree/html5.vim', {'for': 'html'}              " html5 tags support
+Plug 'vim-ruby/vim-ruby', {'for': 'ruby'}             " better ruby support
+Plug 'davidhalter/jedi-vim', {'for': 'python'}        " better python autocompletition
+call plug#end()
+
+""""""" Plugin configurations """""""
+"-- Airline --"
 let g:airline_powerline_fonts=1             " airline - enable special symbols
-let g:airline_theme='murmur'                " airline - set theme
-let g:airline#extensions#tabline#enabled=1  " airline - enable tabline extension
-nmap <F8> :TagbarToggle<CR>                 " tagbar - toggle tagbar shortcut
-let g:ycm_add_preview_to_completeopt=0      " ycm - don't preview in split window
-let g:ycm_confirm_extra_conf=0              " ycm - avoid confirmation of extra conf
-set completeopt-=preview                    " ycm - no preview
+let g:airline_theme='jellybeans'            " airline - set theme
 
-" General configurations
-filetype plugin indent on                   " enable filetype detection
+"-- Unite specific configurations --"
+autocmd FileType unite call s:unite_settings()
+function! s:unite_settings()
+  imap <buffer> <C-j> <Plug>(unite_select_next_line)
+  imap <buffer> <C-k> <Plug>(unite_select_previous_line)
+  nmap <buffer> <ESC> <Plug>(unite_exit)
+endfunction
+call unite#filters#matcher_default#use(['matcher_fuzzy'])
+call unite#filters#sorter_default#use(['sorter_rank'])
+if executable('ag')
+  let g:unite_source_grep_command = 'ag'
+  let g:unite_source_grep_default_opts = '--nogroup --nocolor --column'
+  let g:unite_source_grep_recursive_opt = ''
+endif
+nnoremap [unite] <Nop>
+nmap <space> [unite]
+nnoremap [unite]f :Unite -no-split -start-insert file_rec/async<cr>
+nnoremap [unite]o :Unite -no-split -profile-name=ignorecase -auto-preview outline<cr>
+nnoremap [unite]g :Unite -no-split grep:.<cr>
+nnoremap [unite]d :Unite -no-split grep:.:-s:\(TODO\|FIXME\)<cr>
+
+"-- Other plugins --"
+let g:syntastic_python_pylint_args = "--disable=import-error" " syntastic - disable import error with pylint
+let g:better_whitespace_filetypes_blacklist=['unite']
+noremap <F8> :Geeknote<cr>
+let g:GeeknoteFormat="markdown"
+
+""""""" General configurations """""""
+
+"-- General options --"
+filetype plugin indent on                   " enable file type detection
 set undodir=~/.tmp/undo                     " undo directory
 set backupdir=~/.tmp                        " change backups
 set dir=~/.tmp                              " temporal files directory
 set hidden                                  " hide instead of closing buffers
+set wildmenu                                " zsh-style autocomplete
+set wildmode=full                           " style the autocomplete menu
+runtime macros/matchit.vim                  " enable matchit plugin
 
-" Visual configurations
+"-- Visual configurations --"
 syntax on                                   " enable syntax highlighting
 set t_Co=256                                " set color support
-colorscheme heroku                          " setup colorscheme
 set number                                  " show line numbers
-set nowrap                                  " don't wrap lines
 set showmatch                               " show matching parentheses
+colorscheme jellybeans                      " set colorscheme
+set incsearch                               " incremental search (preview position)
+set scrolloff=1                             " try to show one line above/bellow cursor
+set laststatus=2                            " always show status bar
+set listchars=tab:▸\ ,eol:¬                 " Use the same symbols as TextMate for tabstops and EOLs
 
-" General keybindings configuration
-let mapleader=","                           " useful in non-US schemes
-nmap <silent> <leader>ev :e $MYVIMRC<CR>    " quickly edit .vimrc
-nmap <silent> <leader>sv :so $MYVIMRC<CR>   " quickly reload .vimrc
-set pastetoggle=<F2>                        " For pasting large text blocks
-nmap <silent> ,/ :nohlsearch<CR>            " clear search buffer at / press
-map - ddp                                   " Move line down
-map _ ddkP                                   " Move line up
+"-- General keybindings configuration --"
+" Change key for moving up in command history
+cnoremap <C-p> <Up>
+" Change key for moving down in command history
+cnoremap <C-n> <Down>
+" Expand %% to current buffer's path
+cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
+" Save files as super user
+command! SS write !sudo tee % > /dev/null
+" Enable Spanish spell-checker
+command! SCES setlocal spell spelllang=es_mx
+" Enable English spell-checker
+command! SCEN setlocal spell spelllang=en_us
+" Disable spell-checker
+command! DSC setlocal nospell
+" Shortcut to rapidly toggle `set list`
+nmap <leader>l :set list!<CR>
 
-" Motion configurations
+"-- Motion configurations --"
 map <C-h> <C-w>h                            " simple window left
 map <C-j> <C-w>j                            " simple window down
 map <C-k> <C-w>k                            " simple window up
 map <C-l> <C-w>l                            " simple window right
-map <leader><leader>n :bn<CR>               " switch to next buffer
-map <leader><leader>p :bp<CR>               " switch to previous buffer
 
-" Editing configuration
+"-- Editing configuration --"
 set expandtab                               " use spaces for indenting
 set shiftwidth=2                            " for manual indentation
 set softtabstop=2                           " for automatic indentation
 set autoindent                              " simplest automatic indentation
 set shiftround                              " use multiple of shiftwidth when indenting
 
-" External tools configurations
-au BufEnter *.scala setl formatprg=~/bin/scalariform.jar\ --stdin\ --stdout
-
-" Filetype specific configurations
+"-- File type specific configurations --"
 au FileType python setl sw=4 sts=4 et
 au FileType fortran setl sw=4 sts=4 et
 au FileType perl setl sw=4 sts=4 et
+au FileType javascript setl sw=4 sts=4 et
 au FileType go setl noet ts=8 sw=8 sts=8
 
-" Extra tagbar filetypes
-let g:tagbar_type_go = {
-    \ 'ctagstype' : 'go',
-    \ 'kinds'     : [
-        \ 'p:package',
-        \ 'i:imports:1',
-        \ 'c:constants',
-        \ 'v:variables',
-        \ 't:types',
-        \ 'n:interfaces',
-        \ 'w:fields',
-        \ 'e:embedded',
-        \ 'm:methods',
-        \ 'r:constructor',
-        \ 'f:functions'
-    \ ],
-    \ 'sro' : '.',
-    \ 'kind2scope' : {
-        \ 't' : 'ctype',
-        \ 'n' : 'ntype'
-    \ },
-    \ 'scope2kind' : {
-        \ 'ctype' : 't',
-        \ 'ntype' : 'n'
-    \ },
-    \ 'ctagsbin'  : 'gotags',
-  \ 'ctagsargs' : '-sort -silent'
-\ }
-let g:tagbar_type_scala = {
-    \ 'ctagstype' : 'Scala',
-    \ 'kinds'     : [
-        \ 'p:packages:1',
-        \ 'V:values',
-        \ 'v:variables',
-        \ 'T:types',
-        \ 't:traits',
-        \ 'o:objects',
-        \ 'a:aclasses',
-        \ 'c:classes',
-        \ 'r:cclasses',
-        \ 'm:methods'
-  \ ]
-\ }
