@@ -1,0 +1,81 @@
+Config {
+
+   -- appearance
+     font =         "-*-terminus-medium-r-*-*-12-*-*-*-*-*-*-"
+   , bgColor =      "black"
+   , fgColor =      "#266C98"
+   , position =     Top
+   , border =       NoBorder
+   , borderColor =  "black"
+   , iconRoot = "."
+
+   -- layout
+   , sepChar =  "%"   -- delineator between plugin names and straight text
+   , alignSep = "}{"  -- separator between left-right alignment
+   , template = "%StdinReader% | %multicpu% | %coretemp% | %memory% | %dynnetwork% }{ %gmail% | %mpris2% | %date% | %default:Master% | %kbd% "
+
+   -- general behavior
+   , lowerOnStart =     False    -- send to bottom of window stack on start
+   , hideOnStart =      False   -- start with window unmapped (hidden)
+   , allDesktops =      False    -- show on all desktops
+   , overrideRedirect = True    -- set the Override Redirect flag (Xlib)
+   , pickBroadest =     False   -- choose widest display (multi-monitor)
+   , persistent =       True    -- enable/disable hiding (True = disabled)
+
+   -- plugins
+   --   The --template option controls how the plugin is displayed. Text
+   --   color can be set by enclosing in <fc></fc> tags. For more details
+   --   see http://projects.haskell.org/xmobar/#system-monitor-plugins.
+   , commands = [
+        -- network activity monitor (dynamic interface resolution)
+        Run DynNetwork     [ "--template" , "<dev>: <tx>kB/s|<rx>kB/s"
+                             , "--Low"      , "1000"       -- units: kB/s
+                             , "--High"     , "5000"       -- units: kB/s
+                             , "--low"      , "#5d76cb"
+                             , "--normal"   , "darkorange"
+                             , "--high"     , "darkred"
+                             ] 10
+
+        -- cpu activity monitor
+        , Run MultiCpu       [ "--template" , "Cpu: <total>%"
+                             , "--Low"      , "50"         -- units: %
+                             , "--High"     , "85"         -- units: %
+                             , "--low"      , "#5d76cb"
+                             , "--normal"   , "darkorange"
+                             , "--high"     , "darkred"
+                             ] 10
+
+        -- cpu core temperature monitor
+        , Run CoreTemp       [ "--template" , "Temp: <core0>°C"
+                             , "--Low"      , "70"        -- units: °C
+                             , "--High"     , "80"        -- units: °C
+                             , "--low"      , "#266C98"
+                             , "--normal"   , "darkorange"
+                             , "--high"     , "darkred"
+                             ] 50
+
+        -- memory usage monitor
+        , Run Memory         [ "--template" ,"Mem: <usedratio>%"
+                             , "--Low"      , "20"        -- units: %
+                             , "--High"     , "90"        -- units: %
+                             , "--low"      , "#266C98"
+                             , "--normal"   , "darkorange"
+                             , "--high"     , "darkred"
+                             ] 10
+
+        -- time and date indicator
+        --   (%F = y-m-d date, %a = day of week, %T = h:m:s time)
+        , Run Date           "<fc=#266C98>%F (%a) %T</fc>" "date" 10
+
+        -- volume indicator
+        , Run Volume         "default" "Master" [] 10
+
+        -- keyboard layout indicator
+        , Run Kbd            [ ("latam" , "<fc=#8B0000>LA</fc>")
+                             , ("us"    , "<fc=#8B0000>US</fc>")
+                             ]
+        , Run StdinReader
+        , Run Mpris2 "spotify" ["-t", "<artist> - <title>"] 10
+        , Run Com "gmail_checker" ["--no-color"] "gmail" 120
+        ]
+}
