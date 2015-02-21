@@ -2,69 +2,37 @@
 
 "-- General Plugins --"
 call plug#begin('~/.vim/plugged')                     " call vim-plug
-Plug 'vim-scripts/directionalWindowResizer'           " resize windows with C-(hjkl)
+Plug 'vim-scripts/directionalWindowResizer'           " easier window resizing
 Plug 'vim-scripts/bufkill.vim'                        " leave window open when closing buffer
 Plug 'tpope/vim-fugitive'                             " git integration
 Plug 'tpope/vim-commentary'                           " toggle comments
-Plug 'tpope/vim-unimpaired'                           " quick switch between elements
 Plug 'tpope/vim-endwise'                              " autocomplete block endings
 Plug 'tpope/vim-surround'                             " surround keybindings
 Plug 'tpope/vim-eunuch'                               " integrate unix commands
+Plug 'tpope/vim-rsi'                                  " emacs like edit bindings
 Plug 'airblade/vim-gitgutter'                         " show git changes inline
 Plug 'ntpeters/vim-better-whitespace'                 " show trailing whitespace
-Plug 'ciaranm/detectindent'                           " autodetect indent
-Plug 'scrooloose/syntastic'                           " check syntaxis for different languages
+Plug 'scrooloose/syntastic'                           " check syntax errors
 Plug 'Yggdroot/indentLine'                            " show line indents
 Plug 'itchyny/lightline.vim'                          " statusbar
 Plug 'mattn/emmet-vim'                                " awsome html editing
-Plug 'nanotech/jellybeans.vim'                        " awesome colorscheme
-Plug 'noahfrederick/vim-hemisu'                       " another awesome color scheme
-Plug 'ajh17/Spacegray.vim'                            " yet another colorscheme
-Plug 'dsolstad/vim-wombat256i'
 Plug 'rking/ag.vim'                                   " use ag for searching
 Plug 'kien/ctrlp.vim'                                 " quickly open files
-Plug 'nelstrom/vim-visual-star-search'                " use * for searching visual selection
-Plug 'sjl/gundo.vim'                                  " view undo tree
-Plug 'nelstrom/vim-qargs'                             " set arglist to files in quicklist
 Plug 'majutsushi/tagbar'                              " tag sidebar plus in-memory tags file
-Plug 'gregsexton/gitv'                                " browse git history
 Plug 'mtth/scratch.vim'                               " better scratch buffer
-Plug 'arecarn/crunch.vim'                             " calculator powers for vim
-
-"-- Text Objects --"
-Plug 'kana/vim-textobj-user'                          " user text objects
-Plug 'kana/vim-textobj-entire'                        " ae becomes entire text object
-Plug 'kana/vim-textobj-function'                      " af/if for function as text objects
-Plug 'bps/vim-textobj-python', {'for': 'python'}      " af/if, ac,ic for function/classes objexts
-Plug 'thinca/vim-textobj-function-javascript',
-      \{'for': 'javascript'}                          " javascript functions text objets
-Plug 'nelstrom/vim-textobj-rubyblock',
-      \{'for': 'ruby'}                                " ar/ir for ruby blocks text objects
+Plug 'SirVer/ultisnips'                               " snip engine
+Plug 'honza/vim-snippets'                             " snippets collection
+Plug 'amdt/vim-niji'                                  " rainbow parentheses
+Plug 'ELouisYoung/vim-better-molokai'                 " molokai with no background
 
 "-- Language-specific plugins --"
+Plug 'JuliaLang/julia-vim'                            " julia support
 Plug 'plasticboy/vim-markdown'                        " markdown support
 Plug 'ekalinin/Dockerfile.vim'                        " syntax highlighting for dockerfiles
-Plug 'pangloss/vim-javascript', {'for': 'javascript'} " better javascript support
-Plug 'marijnh/tern_for_vim',
-      \{'for': 'javascript', 'do': 'npm install'}     " tern-based javascript completition
+Plug 'pangloss/vim-javascript'                        " better javascript support
 Plug 'mxw/vim-jsx'                                    " Support for jsx files
-Plug 'othree/html5.vim', {'for': 'html'}              " html5 tags support
-Plug 'vim-ruby/vim-ruby', {'for': 'ruby'}             " better ruby support
-Plug 'davidhalter/jedi-vim', {'for': 'python'}        " better python autocompletition
+Plug 'vim-ruby/vim-ruby'                              " better ruby support
 call plug#end()
-
-""""""" Plugin configurations """""""
-
-let g:syntastic_python_pylint_args = "--disable=import-error" " syntastic - disable import error with pylint
-" Remap Ag search
-nnoremap <SPACE>f :Ag<SPACE>
-" Map gundo toggle
-nnoremap <F5> :GundoToggle<CR>
-" Tagbar toggle
-noremap <F8> :TagbarToggle<CR>
-" Stage and revert hunks
-nmap <Leader>ha <Plug>GitGutterStageHunk
-nmap <Leader>hu <Plug>GitGutterRevertHunk
 
 """"""" General configurations """""""
 
@@ -86,17 +54,21 @@ set lazyredraw                              " buffer screen updates (faster)
 syntax on                                   " enable syntax highlighting
 set t_Co=256                                " set color support
 set number                                  " show line numbers
+set relativenumber                          " easier motion with relative line numbers
 set showmatch                               " show matching parentheses
-set background=dark                         " use dark background by default
-colorscheme hemisu                          " set colorscheme
+hi MatchParen cterm=bold ctermbg=none ctermfg=none
+colorscheme better-molokai                  " set colorscheme
 set incsearch                               " incremental search (preview position)
 set scrolloff=1                             " try to show one line above/bellow cursor
 set laststatus=2                            " always show status bar
 set listchars=tab:▸\ ,eol:¬                 " Use the same symbols as TextMate for tabstops and EOLs
 set hlsearch                                " Enable highlight search
-set cursorline                              " highlight current line
+" set cursorline                              " highlight current line
 
 "-- General keybindings configuration --"
+" Make space the leader key
+nnoremap <Space> <Nop>
+let mapleader = "\<Space>"
 " Change key for moving up in command history
 cnoremap <C-p> <Up>
 " Change key for moving down in command history
@@ -110,14 +82,9 @@ command! SCEN setlocal spell spelllang=en_us
 " Disable spell-checker
 command! DSC setlocal nospell
 " Shortcut to rapidly toggle `set list`
-nmap <leader>l ;set list!<CR>
+nmap <Leader>m :set list!<CR>
 " Temporarily disable text highlight
-nmap <leader>c ;<C-u>nohlsearch<CR>
-" Colon is used way more than semicolon
-nnoremap ; :
-nnoremap : ;
-vnoremap ; :
-vnoremap : ;
+nmap <Leader>c :<C-u>nohlsearch<CR>
 " Count search matches
 command! CM %s///gn
 " Help endwise a little bit
@@ -125,6 +92,40 @@ imap <C-J> <CR>
 " Improve & command - repeat substitution with same flags
 nnoremap & :&&<CR>
 xnoremap & :&&<CR>
+" Easier file saving
+nnoremap <Leader>w :w<CR>
+nnoremap <Leader>W :wa<CR>
+" Easier quit
+nnoremap <Leader>q :q<CR>
+nnoremap <Leader>Q :qa<CR>
+" Easier buffer change
+nnoremap <Leader>n :bn<CR>
+nnoremap <Leader>b :bp<CR>
+" Easier tab change
+nnoremap <Leader>r gt
+nnoremap <Leader>e gT
+" Easier enter to visual mode
+nnoremap <Leader>v V
+" Easier copy and paste to clipboard
+vmap <Leader>y "+y
+vmap <Leader>d "+d
+nmap <Leader>p "+p
+nmap <Leader>P "+P
+vmap <Leader>p "+p
+vmap <Leader>P "+P
+" Close buffer
+nnoremap <Leader>x :bd<CR>
+" Close buffer without altering layout
+nnoremap <Leader>X :BD<CR>
+
+"-- Plugin keybindings --"
+" Remap Ag search
+nnoremap <Leader>f :Ag<SPACE>
+" Tagbar toggle
+noremap <F8> :TagbarToggle<CR>
+" Stage and revert hunks
+nmap <Leader>ah <Plug>GitGutterStageHunk
+nmap <Leader>uh <Plug>GitGutterRevertHunk
 
 "-- Editing configuration --"
 set expandtab                               " use spaces for indenting
@@ -140,4 +141,5 @@ au FileType perl setl sw=4 sts=4 et
 au FileType javascript setl sw=4 sts=4 et
 au FileType java setl sw=3 sts=3 et
 au FileType go setl noet ts=8 sw=8 sts=8
+au FileType julia setl sw=4 sts=4 et
 
