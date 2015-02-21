@@ -1,0 +1,47 @@
+! Molokai black background
+! terminal colours
+URxvt*foreground:#CCCCCC
+URxvt*background:#000000
+!black darkgray
+URxvt*color0: #1B1D1E
+URxvt*color8: #808080
+!darkred red
+URxvt*color1: #FF0044
+URxvt*color9: #F92672
+!darkgreen green
+URxvt*color2: #82B414
+URxvt*color10: #A6E22E
+!darkyellow yellow
+URxvt*color3: #FD971F
+URxvt*color11: #E6DB74
+!darkblue blue
+URxvt*color4: #266C98
+URxvt*color12: #7070F0
+!darkmagenta magenta
+URxvt*color5: #AC0CB1
+URxvt*color13: #D63AE1
+!darkcyan cyan
+URxvt*color6: #AE81FF
+URxvt*color14: #66D9EF
+!gray white
+URxvt*color7: #CCCCCC
+! Pointer
+URxvt.pointerBlank: true
+!-- Xft settings -- !
+URxvt*font: -*-terminus-medium-r-*-*-14-*-*-*-*-*-*-*
+! other settings
+URxvt*scrollBar: false
+URxvt*saveLines: 8000
+! URLs
+URxvt.perl-ext-common: default,matcher,keyboard-select,url-select,clipboard
+URxvt.url-launcher: /usr/bin/firefox
+URxvt.matcher.button: 1
+! keyboard-select extension
+URxvt.keysym.M-Escape: perl:keyboard-select:activate
+! url-select
+URxvt.keysym.M-u: perl:url-select:select_next
+URxvt.url-select.launcher: /usr/bin/firefox
+! clipboard extension
+URxvt.keysym.M-y:   perl:clipboard:copy
+URxvt.keysym.M-v:   perl:clipboard:paste
+URxvt.keysym.M-C-v: perl:clipboard:paste_escaped
