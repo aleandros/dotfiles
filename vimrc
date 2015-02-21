@@ -2,22 +2,44 @@
 
 "-- General Plugins --"
 call plug#begin('~/.vim/plugged')                     " call vim-plug
+Plug 'vim-scripts/directionalWindowResizer'           " resize windows with C-(hjkl)
+Plug 'vim-scripts/bufkill.vim'                        " leave window open when closing buffer
 Plug 'tpope/vim-fugitive'                             " git integration
 Plug 'tpope/vim-commentary'                           " toggle comments
 Plug 'tpope/vim-unimpaired'                           " quick switch between elements
-Plug 'airblade/vim-gitgutter'                         " show git changes inline
-Plug 'bling/vim-airline'                              " status bar
+Plug 'tpope/vim-endwise'                              " autocomplete block endings
 Plug 'tpope/vim-surround'                             " surround keybindings
+Plug 'tpope/vim-eunuch'                               " integrate unix commands
+Plug 'airblade/vim-gitgutter'                         " show git changes inline
 Plug 'ntpeters/vim-better-whitespace'                 " show trailing whitespace
 Plug 'ciaranm/detectindent'                           " autodetect indent
 Plug 'scrooloose/syntastic'                           " check syntaxis for different languages
 Plug 'Yggdroot/indentLine'                            " show line indents
-Plug 'Shougo/vimproc.vim', {'do': 'make'}             " plugin for async operations
-Plug 'Shougo/unite.vim'                               " handle multiple search targets
-Plug 'Shougo/unite-outline'                           " navigate the outline of certain filetypes
-Plug 'neilagabriel/vim-geeknote'                      " integrate geeknote into vim
+Plug 'itchyny/lightline.vim'                          " statusbar
 Plug 'mattn/emmet-vim'                                " awsome html editing
 Plug 'nanotech/jellybeans.vim'                        " awesome colorscheme
+Plug 'noahfrederick/vim-hemisu'                       " another awesome color scheme
+Plug 'ajh17/Spacegray.vim'                            " yet another colorscheme
+Plug 'dsolstad/vim-wombat256i'
+Plug 'rking/ag.vim'                                   " use ag for searching
+Plug 'kien/ctrlp.vim'                                 " quickly open files
+Plug 'nelstrom/vim-visual-star-search'                " use * for searching visual selection
+Plug 'sjl/gundo.vim'                                  " view undo tree
+Plug 'nelstrom/vim-qargs'                             " set arglist to files in quicklist
+Plug 'majutsushi/tagbar'                              " tag sidebar plus in-memory tags file
+Plug 'gregsexton/gitv'                                " browse git history
+Plug 'mtth/scratch.vim'                               " better scratch buffer
+Plug 'arecarn/crunch.vim'                             " calculator powers for vim
+
+"-- Text Objects --"
+Plug 'kana/vim-textobj-user'                          " user text objects
+Plug 'kana/vim-textobj-entire'                        " ae becomes entire text object
+Plug 'kana/vim-textobj-function'                      " af/if for function as text objects
+Plug 'bps/vim-textobj-python', {'for': 'python'}      " af/if, ac,ic for function/classes objexts
+Plug 'thinca/vim-textobj-function-javascript',
+      \{'for': 'javascript'}                          " javascript functions text objets
+Plug 'nelstrom/vim-textobj-rubyblock',
+      \{'for': 'ruby'}                                " ar/ir for ruby blocks text objects
 
 "-- Language-specific plugins --"
 Plug 'plasticboy/vim-markdown'                        " markdown support
@@ -32,36 +54,17 @@ Plug 'davidhalter/jedi-vim', {'for': 'python'}        " better python autocomple
 call plug#end()
 
 """"""" Plugin configurations """""""
-"-- Airline --"
-let g:airline_powerline_fonts=1             " airline - enable special symbols
-let g:airline_theme='jellybeans'            " airline - set theme
 
-"-- Unite specific configurations --"
-autocmd FileType unite call s:unite_settings()
-function! s:unite_settings()
-  imap <buffer> <C-j> <Plug>(unite_select_next_line)
-  imap <buffer> <C-k> <Plug>(unite_select_previous_line)
-  nmap <buffer> <ESC> <Plug>(unite_exit)
-endfunction
-call unite#filters#matcher_default#use(['matcher_fuzzy'])
-call unite#filters#sorter_default#use(['sorter_rank'])
-if executable('ag')
-  let g:unite_source_grep_command = 'ag'
-  let g:unite_source_grep_default_opts = '--nogroup --nocolor --column'
-  let g:unite_source_grep_recursive_opt = ''
-endif
-nnoremap [unite] <Nop>
-nmap <space> [unite]
-nnoremap [unite]f :Unite -no-split -start-insert file_rec/async<cr>
-nnoremap [unite]o :Unite -no-split -profile-name=ignorecase -auto-preview outline<cr>
-nnoremap [unite]g :Unite -no-split grep:.<cr>
-nnoremap [unite]d :Unite -no-split grep:.:-s:\(TODO\|FIXME\)<cr>
-
-"-- Other plugins --"
 let g:syntastic_python_pylint_args = "--disable=import-error" " syntastic - disable import error with pylint
-let g:better_whitespace_filetypes_blacklist=['unite']
-noremap <F8> :Geeknote<cr>
-let g:GeeknoteFormat="markdown"
+" Remap Ag search
+nnoremap <SPACE>f :Ag<SPACE>
+" Map gundo toggle
+nnoremap <F5> :GundoToggle<CR>
+" Tagbar toggle
+noremap <F8> :TagbarToggle<CR>
+" Stage and revert hunks
+nmap <Leader>ha <Plug>GitGutterStageHunk
+nmap <Leader>hu <Plug>GitGutterRevertHunk
 
 """"""" General configurations """""""
 
@@ -74,17 +77,24 @@ set hidden                                  " hide instead of closing buffers
 set wildmenu                                " zsh-style autocomplete
 set wildmode=full                           " style the autocomplete menu
 runtime macros/matchit.vim                  " enable matchit plugin
+set ignorecase                              " case insensitive searching
+set smartcase                               " improve case sensitivity
+set ttyfast                                 " improve scrolling speed
+set lazyredraw                              " buffer screen updates (faster)
 
 "-- Visual configurations --"
 syntax on                                   " enable syntax highlighting
 set t_Co=256                                " set color support
 set number                                  " show line numbers
 set showmatch                               " show matching parentheses
-colorscheme jellybeans                      " set colorscheme
+set background=dark                         " use dark background by default
+colorscheme hemisu                          " set colorscheme
 set incsearch                               " incremental search (preview position)
 set scrolloff=1                             " try to show one line above/bellow cursor
 set laststatus=2                            " always show status bar
 set listchars=tab:▸\ ,eol:¬                 " Use the same symbols as TextMate for tabstops and EOLs
+set hlsearch                                " Enable highlight search
+set cursorline                              " highlight current line
 
 "-- General keybindings configuration --"
 " Change key for moving up in command history
@@ -93,8 +103,6 @@ cnoremap <C-p> <Up>
 cnoremap <C-n> <Down>
 " Expand %% to current buffer's path
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
-" Save files as super user
-command! SS write !sudo tee % > /dev/null
 " Enable Spanish spell-checker
 command! SCES setlocal spell spelllang=es_mx
 " Enable English spell-checker
@@ -102,13 +110,21 @@ command! SCEN setlocal spell spelllang=en_us
 " Disable spell-checker
 command! DSC setlocal nospell
 " Shortcut to rapidly toggle `set list`
-nmap <leader>l :set list!<CR>
-
-"-- Motion configurations --"
-map <C-h> <C-w>h                            " simple window left
-map <C-j> <C-w>j                            " simple window down
-map <C-k> <C-w>k                            " simple window up
-map <C-l> <C-w>l                            " simple window right
+nmap <leader>l ;set list!<CR>
+" Temporarily disable text highlight
+nmap <leader>c ;<C-u>nohlsearch<CR>
+" Colon is used way more than semicolon
+nnoremap ; :
+nnoremap : ;
+vnoremap ; :
+vnoremap : ;
+" Count search matches
+command! CM %s///gn
+" Help endwise a little bit
+imap <C-J> <CR>
+" Improve & command - repeat substitution with same flags
+nnoremap & :&&<CR>
+xnoremap & :&&<CR>
 
 "-- Editing configuration --"
 set expandtab                               " use spaces for indenting
@@ -122,5 +138,6 @@ au FileType python setl sw=4 sts=4 et
 au FileType fortran setl sw=4 sts=4 et
 au FileType perl setl sw=4 sts=4 et
 au FileType javascript setl sw=4 sts=4 et
+au FileType java setl sw=3 sts=3 et
 au FileType go setl noet ts=8 sw=8 sts=8
 
