@@ -16,7 +16,6 @@ Plug 'scrooloose/syntastic'                           " check syntax errors
 Plug 'Yggdroot/indentLine'                            " show line indents
 Plug 'itchyny/lightline.vim'                          " statusbar
 Plug 'mattn/emmet-vim'                                " awsome html editing
-Plug 'noahfrederick/vim-hemisu'                       " great high-contrast colorscheme
 Plug 'rking/ag.vim'                                   " use ag for searching
 Plug 'kien/ctrlp.vim'                                 " quickly open files
 Plug 'majutsushi/tagbar'                              " tag sidebar plus in-memory tags file
@@ -35,6 +34,7 @@ Plug 'pangloss/vim-javascript'                        " better javascript suppor
 Plug 'mxw/vim-jsx'                                    " Support for jsx files
 Plug 'vim-ruby/vim-ruby'                              " better ruby support
 Plug 'stephpy/vim-yaml'                               " better yaml support
+
 call plug#end()
 
 """"""" General configurations """""""
@@ -60,7 +60,6 @@ set number                                  " show line numbers
 set relativenumber                          " easier motion with relative line numbers
 set showmatch                               " show matching parentheses
 hi MatchParen cterm=bold ctermbg=none ctermfg=none
-set background=dark                         " set default background style
 colorscheme better-molokai                  " set colorscheme
 set incsearch                               " incremental search (preview position)
 set scrolloff=1                             " try to show one line above/bellow cursor
@@ -145,4 +144,5 @@ au FileType perl setl sw=4 sts=4 et
 au FileType javascript setl sw=4 sts=4 et
 au FileType java setl sw=3 sts=3 et
 au FileType go setl noet ts=8 sw=8 sts=8
+au FileType julia setl sw=4 sts=4 et
 
