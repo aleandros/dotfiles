@@ -12,7 +12,7 @@ Config {
    -- layout
    , sepChar =  "%"   -- delineator between plugin names and straight text
    , alignSep = "}{"  -- separator between left-right alignment
-   , template = "%StdinReader% | %multicpu% | %coretemp% | %memory% | %dynnetwork% }{ %gmail% | %mpris2% | %date% | %default:Master% | %kbd% "
+   , template = "%StdinReader% | %multicpu% | %coretemp% | %memory% | %dynnetwork% }{ %mpris2% | %date% | %default:Master% | %kbd% "
 
    -- general behavior
    , lowerOnStart =     False    -- send to bottom of window stack on start
@@ -76,6 +76,5 @@ Config {
                              ]
         , Run StdinReader
         , Run Mpris2 "spotify" ["-t", "<artist> - <title>"] 10
-        , Run Com "gmail_checker" ["--no-color"] "gmail" 120
         ]
 }
