@@ -42,7 +42,7 @@ plugins=(gitfast git-extras aws taskwarrior tmux docker pip virtualenvwrapper co
 source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
-export PATH=$PATH:$HOME/bin_external:$HOME/bin:$HOME/.cabal/bin:/usr/lib/lightdm/lightdm:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games
+export PATH=$HOME/.rbenv/bin:$PATH:$HOME/bin_external:$HOME/bin:$HOME/.cabal/bin:/usr/lib/lightdm/lightdm:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games
 
 # Manual----ALIASES
 alias stop="kill -TSTP"
@@ -73,3 +73,6 @@ export PATH=$GOPATH:$GOPATH/bin:${PATH}
 # NVM configuration
 export NVM_DIR="/$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+
+# Load rbenv
+eval "$(rbenv init -)"
