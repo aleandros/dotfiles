@@ -34,13 +34,13 @@ URxvt*scrollBar: false
 URxvt*saveLines: 8000
 ! URLs
 URxvt.perl-ext-common: default,matcher,keyboard-select,url-select,clipboard
-URxvt.url-launcher: /usr/bin/firefox
+URxvt.url-launcher: /opt/google/chrome/google-chrome
 URxvt.matcher.button: 1
 ! keyboard-select extension
 URxvt.keysym.M-Escape: perl:keyboard-select:activate
 ! url-select
 URxvt.keysym.M-u: perl:url-select:select_next
-URxvt.url-select.launcher: /usr/bin/firefox
+URxvt.url-select.launcher: /opt/google/chrome/google-chrome
 ! clipboard extension
 URxvt.keysym.M-y:   perl:clipboard:copy
 URxvt.keysym.M-v:   perl:clipboard:paste
