@@ -28,7 +28,16 @@ URxvt*color7: #CCCCCC
 ! Pointer
 URxvt.pointerBlank: true
 !-- Xft settings -- !
-URxvt*font: -*-terminus-medium-r-*-*-14-*-*-*-*-*-*-*
+!URxvt*font: -*-terminus-medium-r-*-*-14-*-*-*-*-*-*-*
+Xft.dpi:        96
+Xft.antialias:  true
+Xft.rgba:       rgb
+Xft.hinting:    true
+Xft.hintstyle:  hintslight
+
+URxvt.letterSpace: -1
+URxvt.font:xft:Ubuntu Mono:pixelsize=14,style=regular
+URxvt.boldFont:xft:Ubuntu Mono:pixelsize=14,style=bold
 ! other settings
 URxvt*scrollBar: false
 URxvt*saveLines: 8000
