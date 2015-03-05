@@ -12,7 +12,7 @@ Config {
    -- layout
    , sepChar =  "%"   -- delineator between plugin names and straight text
    , alignSep = "}{"  -- separator between left-right alignment
-   , template = "%StdinReader% | %multicpu% | %coretemp% | %memory% | %dynnetwork% }{ %mpris2% | %date% | %default:Master% | %kbd% "
+   , template = "%StdinReader% | %multicpu% | %coretemp% | %memory% | %dynnetwork% }{ %mpris2% | %default:Master% | %wlan0wi%  | %battery% | %kbd% | %date% "
 
    -- general behavior
    , lowerOnStart =     False    -- send to bottom of window stack on start
@@ -65,10 +65,10 @@ Config {
 
         -- time and date indicator
         --   (%F = y-m-d date, %a = day of week, %T = h:m:s time)
-        , Run Date           "<fc=#266C98>%F (%a) %T</fc>" "date" 10
+        , Run Date           "<fc=#266C98>%d/%m %H:%M</fc>" "date" 10
 
         -- volume indicator
-        , Run Volume         "default" "Master" [] 10
+        , Run Volume         "default" "Master" [] 5
 
         -- keyboard layout indicator
         , Run Kbd            [ ("latam" , "<fc=#8B0000>LA</fc>")
@@ -76,5 +76,7 @@ Config {
                              ]
         , Run StdinReader
         , Run Mpris2 "spotify" ["-t", "<artist> - <title>"] 10
+        , Run BatteryP ["BAT1"] ["--template", "<left>% / <timeleft>"] 10
+        , Run Wireless "wlan0" [] 10
         ]
 }

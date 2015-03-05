@@ -23,7 +23,8 @@ Plug 'mtth/scratch.vim'                               " better scratch buffer
 Plug 'SirVer/ultisnips'                               " snip engine
 Plug 'honza/vim-snippets'                             " snippets collection
 Plug 'amdt/vim-niji'                                  " rainbow parentheses
-Plug 'ELouisYoung/vim-better-molokai'
+Plug 'ELouisYoung/vim-better-molokai'                 " molokai colorscheme w/o background
+Plug 'jgdavey/tslime.vim'                             " tmux integration
 
 "-- Language-specific plugins --"
 Plug 'JuliaLang/julia-vim'                            " julia support
@@ -33,8 +34,7 @@ Plug 'ekalinin/Dockerfile.vim'                        " syntax highlighting for 
 Plug 'pangloss/vim-javascript'                        " better javascript support
 Plug 'mxw/vim-jsx'                                    " Support for jsx files
 Plug 'vim-ruby/vim-ruby'                              " better ruby support
-Plug 'stephpy/vim-yaml'                               " better yaml support
-
+Plug 'stephpy/vim-yaml'                               " better yaml syntax
 call plug#end()
 
 """"""" General configurations """""""
@@ -129,6 +129,10 @@ noremap <F8> :TagbarToggle<CR>
 " Stage and revert hunks
 nmap <Leader>ah <Plug>GitGutterStageHunk
 nmap <Leader>uh <Plug>GitGutterRevertHunk
+" tslime
+vmap <C-c><C-c> <Plug>SendSelectionToTmux
+nmap <C-c><C-c> <Plug>NormalModeSendToTmux
+nmap <C-c>r <Plug>SetTmuxVars
 
 "-- Editing configuration --"
 set expandtab                               " use spaces for indenting
